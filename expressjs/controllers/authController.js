@@ -7,9 +7,9 @@ async function register(req, res) {
 		const user = new User(req.body)
 		await user.save()
 		const token = await user.generateToken()
-		returnStatus(201, 'User registered successfully.', { user, token }, null, res)
+		returnStatus(201, 'User registered successfully.', token, null, res)
 	} catch (e) {
-		returnStatus(400, e.message, null, res)
+		returnStatus(400, e.message, null, null, res)
 	}
 }
 

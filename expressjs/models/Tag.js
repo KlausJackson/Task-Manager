@@ -6,7 +6,8 @@ const tagSchema = new Schema(
 		uuid: {
 			type: String,
 			required: true,
-			unique: true
+			unique: true,
+			index: true
 		},
 		name: {
 			type: String,
@@ -17,6 +18,10 @@ const tagSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 			required: true
+		},
+		isDeleted: {
+			type: Boolean,
+			default: false
 		}
 	},
 	{

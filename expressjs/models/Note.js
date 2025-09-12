@@ -46,10 +46,10 @@ const noteSchema = new Schema(
 			ref: 'User',
 			required: true
 		},
-		tags: [
+		tagUUIDs: [
 			{
-				type: Schema.Types.ObjectId,
-				ref: 'Tag'
+				type: String,
+				default: []
 			}
 		],
 		isDeleted: {
@@ -58,9 +58,19 @@ const noteSchema = new Schema(
 		}
 	},
 	{
-		timestamps: true
+		timestamps: true,
+		// Enable virtuals for JSON and object output
+		toJSON: { virtuals: true },
+		toObject: { virtuals: true }
 	}
 )
+
+noteSchema.virtual('tags', {
+	ref: 'Tag',
+	localField: 'tagUUIDs', // Find the strings in the `tags` field of this schema (Note)
+	foreignField: 'uuid', // Find documents in the `Tag` schema where the `uuid` field matches
+	justOne: false // populating an array of tags
+})
 
 const Note = mongoose.model('Note', noteSchema)
 module.exports = Note

@@ -11,7 +11,7 @@ async function createTag(req, res) {
 			return returnStatus(409, 'Tag already exists.', null, 'Conflict', res)
 		}
 
-		const tag = new Tag({ name: req.body.name, user: req.user._id })
+		const tag = new Tag({ uuid: req.body.uuid, name: req.body.name, user: req.user._id })
 		await tag.save()
 		returnStatus(201, 'Tag created successfully.', tag, null, res)
 	} catch (e) {
@@ -35,7 +35,7 @@ async function getTags(req, res) {
 async function updateTag(req, res) {
 	try {
 		const tag = await Tag.findOne({
-			_id: req.params.id,
+			uuid: req.params.id,
 			user: req.user._id
 		})
 		if (!tag) {

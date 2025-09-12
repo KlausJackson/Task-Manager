@@ -5,10 +5,10 @@ const app = express()
 const port = process.env.PORT || 3000
 
 
-const authRoute = require('./routers/authRoute')
-const noteRouter = require('./routers/noteRoute')
-const tagRouter = require('./routers/tagRoute')
-const syncRouter = require('./routers/syncRoute')
+const authRoute = require('./routes/authRoute')
+const noteRouter = require('./routes/noteRoute')
+const tagRouter = require('./routes/tagRoute')
+const syncRouter = require('./routes/syncRoute')
 const auth = require('./middlewares/auth')
 
 
