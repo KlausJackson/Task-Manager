@@ -32,7 +32,7 @@ Task Manager for managing notes, not Task Manager (the kind that manages process
 ```json
 {
     "username" : "test1",
-    "password": 123456
+    "password": "123456"
 }
 ```
 
@@ -40,10 +40,7 @@ Task Manager for managing notes, not Task Manager (the kind that manages process
 ```json
 {
     "message": "User registered successfully.",
-    "data": {
-        "user": {},
-        "token": "Something super long."
-    },
+    "data": "Something super long.",
     "error": null
 }
 ```
