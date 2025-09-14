@@ -10,7 +10,7 @@ Task Manager for managing notes, not Task Manager (the kind that manages process
 | 1   | POST   | /api/v1/auth/register    | Register a new user                 |
 | 2   | POST   | /api/v1/auth/login       | Log in, get a token                 |
 | 3   | DELETE | /api/v1/auth/me          | Delete your own account             |
-| 4   | GET    | /api/v1/sync/            | Sync data                           |
+| 4   | POST   | /api/v1/sync/            | Sync data                           |
 | 5   | POST   | /api/v1/notes            | Create a new note                   |
 | 6   | GET    | /api/v1/notes            | Get notes (filter: tag, words, etc) |
 | 7   | GET    | /api/v1/notes/id         | Get a note                          |

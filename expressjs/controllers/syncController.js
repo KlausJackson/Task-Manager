@@ -88,8 +88,8 @@ async function syncTags(tags, user) {
 
 async function syncData(req, res) {
 	try {
-		const { lastSyncedAt, notes, tags } = req.query
-		const sinceDate = lastSyncedAt ? new Date(lastSyncedAt) : new Date(0)
+		const { lastSynced, notes, tags } = req.body
+		const sinceDate = lastSynced ? new Date(lastSynced) : new Date(0)
 
 		let pushedNotes = []
 		let pushedTags = []
