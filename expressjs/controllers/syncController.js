@@ -118,6 +118,7 @@ async function syncData(req, res) {
 
 		returnStatus(200, 'Sync data retrieved successfully.', data, null, res)
 	} catch (error) {
+		console.log('syncData: ', error)
 		returnStatus(500, 'Sync failed.', null, error.message, res)
 	}
 }

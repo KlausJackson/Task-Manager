@@ -15,6 +15,7 @@ async function createTag(req, res) {
 		await tag.save()
 		returnStatus(201, 'Tag created successfully.', tag, null, res)
 	} catch (e) {
+		console.log('createTag: ', e)
 		returnStatus(500, 'Failed to create tag.', null, e.message, res)
 	}
 }
@@ -27,6 +28,7 @@ async function getTags(req, res) {
             }).sort({ name: 1 })
 		returnStatus(200, 'Tags retrieved successfully.', tags, null, res)
 	} catch (e) {
+		console.log('getTags: ', e)
 		returnStatus(500, 'Failed to retrieve tags.', null, e.message, res)
 	}
 }
@@ -53,6 +55,7 @@ async function updateTag(req, res) {
 		await tag.save()
 		returnStatus(200, 'Tag updated successfully.', tag, null, res)
 	} catch (error) {
+		console.log('updateTag: ', error)
 		returnStatus(500, 'Failed to update tag.', null, error.message, res)
 	}
 }
@@ -75,6 +78,7 @@ async function deleteTag(req, res) {
 		)
 		returnStatus(200, 'Tag deleted successfully.', tag, null, res)
 	} catch (error) {
+		console.log('deleteTag: ', error)
 		returnStatus(500, 'Failed to delete tag.', null, error.message, res)
 	}
 }

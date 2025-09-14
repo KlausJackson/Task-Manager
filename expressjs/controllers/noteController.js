@@ -21,6 +21,7 @@ async function createNote(req, res) {
         await note.save()
         returnStatus(201, 'Note created successfully.', note, null, res)
     } catch (e) {
+        console.log('createNote: ', e)
         returnStatus(400, 'Failed to create note.', null, e.message, res)
     }
 }
@@ -64,6 +65,7 @@ async function getNotes(req, res) {
 
         returnStatus(200, 'Notes retrieved successfully.', responseData, null, res)
     } catch (e) {
+        console.log('getNotes: ', e)
         returnStatus(500, 'Failed to retrieve notes.', null, e.message, res)
     }
 }
@@ -77,6 +79,7 @@ async function getNote(req, res) {
 		if (!note) return returnStatus(404, 'Note not found.', null, null, res)
 		returnStatus(200, 'Note retrieved successfully.', note, null, res)
 	} catch (e) {
+        console.log('getNote: ', e)
         returnStatus(500, 'Failed to retrieve note.', null, e.message, res)
     }
 }
@@ -99,6 +102,7 @@ async function updateNote(req, res) {
         await note.save()
         returnStatus(200, 'Note updated successfully.', note, null, res)
     } catch (e) {
+        console.log('updateNote: ', e)
         returnStatus(500, 'Failed to update note.', null, e.message, res)
     }
 }
@@ -114,6 +118,7 @@ async function deleteNote(req, res) {
         if (!note) return returnStatus(404, 'Note not found.', null, 'Not Found', res)
         returnStatus(200, 'Note deleted successfully.', note, null, res)
     } catch (e) {
+        console.log('deleteNote: ', e)
         returnStatus(500, 'Failed to delete note.', null, e.message, res)
     }
 }
@@ -124,6 +129,7 @@ async function getDeletedNotes(req, res) {
         const notes = await Note.find({ user: req.user._id, isDeleted: true })
         returnStatus(200, 'Deleted notes retrieved successfully.', notes, null, res)
     } catch (e) {
+        console.log('getDeletedNotes: ', e)
         returnStatus(500, 'Failed to retrieve deleted notes.', null, e.message, res)
     }
 }
@@ -139,6 +145,7 @@ async function restoreNote(req, res) {
         if (!note) return returnStatus(404, 'Note not found or not deleted.', null, 'Not Found', res)
         returnStatus(200, 'Note restored successfully.', note, null, res)
     } catch (e) {
+        console.log('restoreNote: ', e)
         returnStatus(500, 'Failed to restore note.', null, e.message, res)
     }
 }
@@ -150,6 +157,7 @@ async function permanentlyDeleteNote(req, res) {
         if (!note) return returnStatus(404, 'Note not found or not deleted.', null, 'Not Found', res)
         returnStatus(200, 'Note permanently deleted successfully.', note, null, res)
     } catch (e) {
+        console.log('permanentlyDeleteNote: ', e)
         returnStatus(500, 'Failed to permanently delete note.', null, e.message, res)
     }
 }

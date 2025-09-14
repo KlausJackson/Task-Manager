@@ -45,6 +45,24 @@ Task Manager for managing notes, not Task Manager (the kind that manages process
 }
 ```
 
+### DELETE /api/v1/auth/me
+
+**Body**
+```json
+{
+    "password": "123456"
+}
+```
+
+**Response**
+```json
+{
+    "message": "User deleted successfully.",
+    "data": null,
+    "error": null
+}
+```
+
 ## Note
 
 ### GET /api/v1/notes
