@@ -22,7 +22,8 @@ async function syncNotes(notes, user) {
 			operations.push({
 				updateOne: {
 					filter: { uuid, user },
-					update: { $set: updateData }
+					update: { $set: updateData },
+					upsert: true // in case note doesn't exist, create it
 				}
 			})
 			pushedNotes.push(uuid)
