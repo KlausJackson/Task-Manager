@@ -87,18 +87,16 @@ async function getNote(req, res) {
 
 async function updateNote(req, res) {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['title', 'body', 'isPinned', 'tagUUIDs']
-    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-    if (!isValidOperation) {
-        return returnStatus(400, 'Invalid updates!', null, 'Bad Request', res)
-    }
+    const allowedUpdates = ['title', 'body', 'isPinned', 'tagUUIDs', 'isDeleted']
+    // remove everything that is not allowed to be updated
+    const filteredUpdates = updates.filter((update) => allowedUpdates.includes(update))
     try {
         const note = await Note.findOne({
 			uuid: req.params.id,
 			user: req.user._id
 		})
         if (!note) return returnStatus(404, 'Note not found.', null, 'Not Found', res)
-        updates.forEach((update) => (note[update] = req.body[update]))
+        filteredUpdates.forEach((update) => (note[update] = req.body[update]))
         await note.save()
         returnStatus(200, 'Note updated successfully.', note, null, res)
     } catch (e) {
