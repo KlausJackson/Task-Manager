@@ -43,7 +43,7 @@ async function getNotes(req, res) {
 		baseQuery.tags = { $in: req.query.tags.split(',') }
 	} // tags: ['tag1', 'tag2']
 
-	if (req.query.sortBy) {
+	if (req.query.sortBy) { // title, updatedAt
 		const parts = req.query.sortBy.split(':') // ['title', 'asc']
 		sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
 	} // title:asc becomes { title: 1 }
@@ -51,6 +51,7 @@ async function getNotes(req, res) {
 	try {
 		const notes = await Note.find(baseQuery)
 			.populate('tagUUIDs', 'name') // Populate tags, only show 'name' field
+            .where({ isDeleted: false })
 			.sort(sort)
 			.limit(parseInt(req.query.limit) || 10) // Default to 10 items per page
 			.skip(parseInt(req.query.skip) || 0) // Default to the first page
