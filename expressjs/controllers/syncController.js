@@ -95,8 +95,8 @@ async function syncData(req, res) {
 		let pushedNotes = []
 		let pushedTags = []
 
-		if (notes) pushedNotes = await syncNotes(notes, user)
-		if (tags) pushedTags = await syncTags(tags, user)
+		if (notes) pushedNotes = await syncNotes(notes, req.user)
+		if (tags) pushedTags = await syncTags(tags, req.user)
 
 		// gt: greater than
         const serverNotes = await Note.find({
