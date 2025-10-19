@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Note = require('./Note');
-const Tag = require('./Tag');
-require('dotenv').config();
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const Note = require('./Note')
+const Tag = require('./Tag')
+require('dotenv').config()
 
 const userSchema = new Schema(
   {
@@ -17,7 +17,7 @@ const userSchema = new Schema(
       maxlength: [30, 'Username cannot exceed 30 characters.'],
       validate: {
         validator: function (v) {
-          return v.toLowerCase() !== 'default';
+          return v.toLowerCase() !== 'default'
         },
       }, // block 'default' as username
     },
@@ -31,7 +31,7 @@ const userSchema = new Schema(
   {
     timestamps: true,
   },
-);
+)
 
 // with virtual field to link:
 // const userNotes = await Note.find({ user: userId });
@@ -44,22 +44,22 @@ userSchema.virtual('notes', {
   ref: 'Note',
   localField: '_id',
   foreignField: 'user',
-}); // a virtual field to link user to the notes
+}) // a virtual field to link user to the notes
 
 // ==================================================
 // ---------------- CUSTOM FUNCTIONS ----------------
 // ==================================================
 
 async function findByCredentials(username, password) {
-  const user = await User.findOne({ username });
-  if (!user) throw new Error('No user found.');
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) throw new Error('Invalid password.');
-  return user;
+  const user = await User.findOne({ username })
+  if (!user) throw new Error('No user found.')
+  const isMatch = await bcrypt.compare(password, user.password)
+  if (!isMatch) throw new Error('Invalid password.')
+  return user
 }
 
 async function comparePassword(user, password) {
-  return bcrypt.compare(password, user.password);
+  return bcrypt.compare(password, user.password)
 }
 
 async function generateToken() {
@@ -67,31 +67,31 @@ async function generateToken() {
     { _id: this._id.toString(), username: this.username },
     process.env.JWT_SECRET,
     { expiresIn: '7 days' },
-  );
+  )
 }
 
 async function hashPassword(next) {
-  const user = this;
+  const user = this
   // only hash if it has been modified, meaning new or changed
   if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 4);
+    user.password = await bcrypt.hash(user.password, 4)
   }
-  next();
+  next()
 }
 
 async function deleteUserData(next) {
-  const userToDelete = await this.model.findOne(this.getFilter());
+  const userToDelete = await this.model.findOne(this.getFilter())
   if (userToDelete) {
-    await Note.deleteMany({ user: userToDelete._id });
-    await Tag.deleteMany({ user: userToDelete._id });
+    await Note.deleteMany({ user: userToDelete._id })
+    await Tag.deleteMany({ user: userToDelete._id })
   }
-  next(); // proceed to delete the user
+  next() // proceed to delete the user
 }
 
 async function toJSON() {
-  const userObject = this.toObject();
-  delete userObject.password;
-  return userObject;
+  const userObject = this.toObject()
+  delete userObject.password
+  return userObject
 }
 
 // =============================================
@@ -99,25 +99,25 @@ async function toJSON() {
 // =============================================
 
 // create new function: User.findByCredentials(username, password)
-userSchema.statics.findByCredentials = findByCredentials;
-userSchema.statics.comparePassword = comparePassword;
+userSchema.statics.findByCredentials = findByCredentials
+userSchema.statics.comparePassword = comparePassword
 
 // create new function: user.generateToken()
-userSchema.methods.generateToken = generateToken;
+userSchema.methods.generateToken = generateToken
 
 // overriding built-in Mongoose function
 // hide private data when sending back user object
-userSchema.methods.toJSON = toJSON;
+userSchema.methods.toJSON = toJSON
 
 // before saving the user: 'user.save'
-userSchema.pre('save', hashPassword);
+userSchema.pre('save', hashPassword)
 
 // before removing user: 'user.deleteOne'
 userSchema.pre(
   'findOneAndDelete',
   { document: false, query: true },
   deleteUserData,
-);
+)
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const User = mongoose.model('User', userSchema)
+module.exports = User

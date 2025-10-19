@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const blockSchema = new Schema( // id, data, type (text, checklist)
   {
@@ -21,7 +21,7 @@ const blockSchema = new Schema( // id, data, type (text, checklist)
   {
     _id: false, // disable MongoDB _id for each sub-document block
   },
-);
+)
 
 const noteSchema = new Schema(
   {
@@ -61,14 +61,14 @@ const noteSchema = new Schema(
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   },
-);
+)
 
 noteSchema.virtual('tags', {
   ref: 'Tag',
   localField: 'tagUUIDs', // Find the strings in the `tags` field of this schema (Note)
   foreignField: 'uuid', // Find documents in the `Tag` schema where the `uuid` field matches
   justOne: false, // populating an array of tags
-});
+})
 
-const Note = mongoose.model('Note', noteSchema);
-module.exports = Note;
+const Note = mongoose.model('Note', noteSchema)
+module.exports = Note
