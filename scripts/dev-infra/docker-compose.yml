@@ -1,0 +1,20 @@
+---
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports: [27017:27017]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: application
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: taskmanager
+    volumes: [./data:/data/db]
+    healthcheck:
+      test: [CMD, mongo, --eval, db.adminCommand('ping')]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+# Usage:
+# cd Task-Manager/scripts/dev-infra && docker compose up -d
+# Data directory will be created at Task-Manager/scripts/dev-infra/data and persist DB files.
