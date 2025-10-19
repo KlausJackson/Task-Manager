@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const Tag = require("../models/Tag");
-const Note = require("../models/Note");
-const { returnStatus } = require("../helpers/helpers");
+const mongoose = require('mongoose');
+const Tag = require('../models/Tag');
+const Note = require('../models/Note');
+const { returnStatus } = require('../helpers/helpers');
 
 async function createTag(req, res) {
   try {
@@ -11,7 +11,7 @@ async function createTag(req, res) {
       isDeleted: false,
     });
     if (existingTag) {
-      return returnStatus(409, "Tag already exists.", null, "Conflict", res);
+      return returnStatus(409, 'Tag already exists.', null, 'Conflict', res);
     }
 
     const tag = new Tag({
@@ -20,10 +20,10 @@ async function createTag(req, res) {
       user: req.user._id,
     });
     await tag.save();
-    returnStatus(201, "Tag created successfully.", tag, null, res);
+    returnStatus(201, 'Tag created successfully.', tag, null, res);
   } catch (e) {
-    console.log("createTag: ", e);
-    returnStatus(500, "Failed to create tag.", null, e.message, res);
+    console.log('createTag: ', e);
+    returnStatus(500, 'Failed to create tag.', null, e.message, res);
   }
 }
 
@@ -33,10 +33,10 @@ async function getTags(req, res) {
       user: req.user._id,
       isDeleted: false,
     }).sort({ name: 1 });
-    returnStatus(200, "Tags retrieved successfully.", tags, null, res);
+    returnStatus(200, 'Tags retrieved successfully.', tags, null, res);
   } catch (e) {
-    console.log("getTags: ", e);
-    returnStatus(500, "Failed to retrieve tags.", null, e.message, res);
+    console.log('getTags: ', e);
+    returnStatus(500, 'Failed to retrieve tags.', null, e.message, res);
   }
 }
 
@@ -47,7 +47,7 @@ async function updateTag(req, res) {
       user: req.user._id,
     });
     if (!tag) {
-      return returnStatus(404, "Tag not found.", null, "Not Found", res);
+      return returnStatus(404, 'Tag not found.', null, 'Not Found', res);
     }
 
     if (req.body.name && req.body.name !== tag.name) {
@@ -56,16 +56,16 @@ async function updateTag(req, res) {
         user: req.user._id,
       });
       if (existingTag) {
-        return returnStatus(409, "Tag already exists.", null, "Conflict", res);
+        return returnStatus(409, 'Tag already exists.', null, 'Conflict', res);
       }
       tag.name = req.body.name;
     }
 
     await tag.save();
-    returnStatus(200, "Tag updated successfully.", tag, null, res);
+    returnStatus(200, 'Tag updated successfully.', tag, null, res);
   } catch (error) {
-    console.log("updateTag: ", error);
-    returnStatus(500, "Failed to update tag.", null, error.message, res);
+    console.log('updateTag: ', error);
+    returnStatus(500, 'Failed to update tag.', null, error.message, res);
   }
 }
 
@@ -78,7 +78,7 @@ async function deleteTag(req, res) {
       isDeleted: false,
     });
     if (!tag) {
-      return returnStatus(404, "Tag not found.", null, "Not Found", res);
+      return returnStatus(404, 'Tag not found.', null, 'Not Found', res);
     }
 
     // Prevent deletion if any non-deleted Note references this tag UUID
@@ -90,9 +90,9 @@ async function deleteTag(req, res) {
     if (inUse) {
       return returnStatus(
         409,
-        "Tag is in use and cannot be deleted.",
+        'Tag is in use and cannot be deleted.',
         null,
-        "Conflict",
+        'Conflict',
         res,
       );
     }
@@ -103,10 +103,10 @@ async function deleteTag(req, res) {
       { isDeleted: true }, // Set the soft delete flag
       { new: true }, // Return the updated document
     );
-    returnStatus(200, "Tag deleted successfully.", updated, null, res);
+    returnStatus(200, 'Tag deleted successfully.', updated, null, res);
   } catch (error) {
-    console.log("deleteTag: ", error);
-    returnStatus(500, "Failed to delete tag.", null, error.message, res);
+    console.log('deleteTag: ', error);
+    returnStatus(500, 'Failed to delete tag.', null, error.message, res);
   }
 }
 
@@ -115,10 +115,10 @@ async function getDeletedTags(req, res) {
     const tags = await Tag.find({ user: req.user._id, isDeleted: true }).sort({
       name: 1,
     });
-    returnStatus(200, "Deleted tags retrieved successfully.", tags, null, res);
+    returnStatus(200, 'Deleted tags retrieved successfully.', tags, null, res);
   } catch (e) {
-    console.log("getDeletedTags: ", e);
-    returnStatus(500, "Failed to retrieve deleted tags.", null, e.message, res);
+    console.log('getDeletedTags: ', e);
+    returnStatus(500, 'Failed to retrieve deleted tags.', null, e.message, res);
   }
 }
 
@@ -132,15 +132,15 @@ async function restoreTag(req, res) {
     if (!tag)
       return returnStatus(
         404,
-        "Tag not found or not deleted.",
+        'Tag not found or not deleted.',
         null,
-        "Not Found",
+        'Not Found',
         res,
       );
-    returnStatus(200, "Tag restored successfully.", tag, null, res);
+    returnStatus(200, 'Tag restored successfully.', tag, null, res);
   } catch (e) {
-    console.log("restoreTag: ", e);
-    returnStatus(500, "Failed to restore tag.", null, e.message, res);
+    console.log('restoreTag: ', e);
+    returnStatus(500, 'Failed to restore tag.', null, e.message, res);
   }
 }
 
@@ -154,17 +154,17 @@ async function permanentlyDeleteTag(req, res) {
     if (!tag)
       return returnStatus(
         404,
-        "Tag not found or not deleted.",
+        'Tag not found or not deleted.',
         null,
-        "Not Found",
+        'Not Found',
         res,
       );
-    returnStatus(200, "Tag permanently deleted successfully.", tag, null, res);
+    returnStatus(200, 'Tag permanently deleted successfully.', tag, null, res);
   } catch (e) {
-    console.log("permanentlyDeleteTag: ", e);
+    console.log('permanentlyDeleteTag: ', e);
     returnStatus(
       500,
-      "Failed to permanently delete tag.",
+      'Failed to permanently delete tag.',
       null,
       e.message,
       res,

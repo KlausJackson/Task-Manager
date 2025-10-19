@@ -1,6 +1,6 @@
-const Note = require("../models/Note");
-const Tag = require("../models/Tag");
-const { returnStatus } = require("../helpers/helpers");
+const Note = require('../models/Note');
+const Tag = require('../models/Tag');
+const { returnStatus } = require('../helpers/helpers');
 
 async function syncNotes(notes, user) {
   const operations = [];
@@ -116,10 +116,10 @@ async function syncData(req, res) {
       timestamp: new Date().toISOString(), // Server provides the new sync time
     };
 
-    returnStatus(200, "Sync data retrieved successfully.", data, null, res);
+    returnStatus(200, 'Sync data retrieved successfully.', data, null, res);
   } catch (error) {
-    console.log("syncData: ", error);
-    returnStatus(500, "Sync failed.", null, error.message, res);
+    console.log('syncData: ', error);
+    returnStatus(500, 'Sync failed.', null, error.message, res);
   }
 }
 

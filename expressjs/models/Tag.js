@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const tagSchema = new Schema(
@@ -16,7 +16,7 @@ const tagSchema = new Schema(
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     isDeleted: {
@@ -38,5 +38,5 @@ tagSchema.index(
   { unique: true, partialFilterExpression: { isDeleted: false } },
 );
 
-const Tag = mongoose.model("Tag", tagSchema);
+const Tag = mongoose.model('Tag', tagSchema);
 module.exports = Tag;
