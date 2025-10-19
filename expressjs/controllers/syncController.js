@@ -74,10 +74,12 @@ async function syncTags(tags, user) {
 
   if (tags.deleted && tags.deleted.length > 0) {
     operations.push({
-      deleteMany: {
+      updateMany: {
         filter: { uuid: { $in: tags.deleted }, user },
+        update: { $set: { isDeleted: true } },
       },
     });
+    pushedTags.push(...tags.deleted);
   }
 
   if (operations.length > 0) await Tag.bulkWrite(operations);

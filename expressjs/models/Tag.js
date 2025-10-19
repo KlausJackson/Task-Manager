@@ -33,7 +33,10 @@ const tagSchema = new Schema(
 // different users can have tags with the same name,
 // but one user cannot have two tags with the same name
 // Ensure uniqueness only among non-deleted tags to allow recreating names after soft-delete
-tagSchema.index({ name: 1, user: 1 }, { unique: true, partialFilterExpression: { isDeleted: false } });
+tagSchema.index(
+  { name: 1, user: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: false } },
+);
 
 const Tag = mongoose.model("Tag", tagSchema);
 module.exports = Tag;

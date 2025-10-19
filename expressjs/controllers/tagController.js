@@ -72,15 +72,29 @@ async function updateTag(req, res) {
 async function deleteTag(req, res) {
   try {
     // Find tag by uuid and ensure it's not already deleted
-    const tag = await Tag.findOne({ uuid: req.params.id, user: req.user._id, isDeleted: false });
+    const tag = await Tag.findOne({
+      uuid: req.params.id,
+      user: req.user._id,
+      isDeleted: false,
+    });
     if (!tag) {
       return returnStatus(404, "Tag not found.", null, "Not Found", res);
     }
 
     // Prevent deletion if any non-deleted Note references this tag UUID
-    const inUse = await Note.exists({ user: req.user._id, tagUUIDs: tag.uuid, isDeleted: false });
+    const inUse = await Note.exists({
+      user: req.user._id,
+      tagUUIDs: tag.uuid,
+      isDeleted: false,
+    });
     if (inUse) {
-      return returnStatus(409, "Tag is in use and cannot be deleted.", null, "Conflict", res);
+      return returnStatus(
+        409,
+        "Tag is in use and cannot be deleted.",
+        null,
+        "Conflict",
+        res,
+      );
     }
 
     // Soft-delete the tag
@@ -98,7 +112,9 @@ async function deleteTag(req, res) {
 
 async function getDeletedTags(req, res) {
   try {
-    const tags = await Tag.find({ user: req.user._id, isDeleted: true }).sort({ name: 1 });
+    const tags = await Tag.find({ user: req.user._id, isDeleted: true }).sort({
+      name: 1,
+    });
     returnStatus(200, "Deleted tags retrieved successfully.", tags, null, res);
   } catch (e) {
     console.log("getDeletedTags: ", e);
@@ -113,7 +129,14 @@ async function restoreTag(req, res) {
       { isDeleted: false }, // Clear the soft delete flag
       { new: true }, // Return the updated document
     );
-    if (!tag) return returnStatus(404, "Tag not found or not deleted.", null, "Not Found", res);
+    if (!tag)
+      return returnStatus(
+        404,
+        "Tag not found or not deleted.",
+        null,
+        "Not Found",
+        res,
+      );
     returnStatus(200, "Tag restored successfully.", tag, null, res);
   } catch (e) {
     console.log("restoreTag: ", e);
@@ -123,12 +146,29 @@ async function restoreTag(req, res) {
 
 async function permanentlyDeleteTag(req, res) {
   try {
-    const tag = await Tag.findOneAndDelete({ uuid: req.params.id, user: req.user._id, isDeleted: true });
-    if (!tag) return returnStatus(404, "Tag not found or not deleted.", null, "Not Found", res);
+    const tag = await Tag.findOneAndDelete({
+      uuid: req.params.id,
+      user: req.user._id,
+      isDeleted: true,
+    });
+    if (!tag)
+      return returnStatus(
+        404,
+        "Tag not found or not deleted.",
+        null,
+        "Not Found",
+        res,
+      );
     returnStatus(200, "Tag permanently deleted successfully.", tag, null, res);
   } catch (e) {
     console.log("permanentlyDeleteTag: ", e);
-    returnStatus(500, "Failed to permanently delete tag.", null, e.message, res);
+    returnStatus(
+      500,
+      "Failed to permanently delete tag.",
+      null,
+      e.message,
+      res,
+    );
   }
 }
 
